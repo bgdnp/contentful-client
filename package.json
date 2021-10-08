@@ -1,6 +1,6 @@
 {
-  "name": "@bgdn/contentful-client",
-  "version": "1.0.0",
+  "name": "@bgdnp/contentful-client",
+  "version": "0.0.1",
   "description": "Contentful client on steroids",
   "main": "dist/index.js",
   "scripts": {
@@ -27,5 +27,9 @@
   "dependencies": {
     "contentful": "^9.0.0",
     "contentful-management": "^7.39.0"
-  }
+  },
+  "files": [
+    "dist/*.js",
+    "dist/**/&.js"
+  ]
 }
