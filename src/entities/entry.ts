@@ -66,9 +66,9 @@ export class CFEntry<TFields> {
   }
 
   async publish(): Promise<CFEntry<TFields>> {
-    if (this.isDraft() || this.isUpdated()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isDraft() || this.isUpdated()) {
       const published = await this.entry.publish();
 
       this.sys = parser.parseSys(published.sys, this.sys);
@@ -78,9 +78,9 @@ export class CFEntry<TFields> {
   }
 
   async unpublish(): Promise<CFEntry<TFields>> {
-    if (this.isPublished()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isPublished()) {
       const unpublished = await this.entry.unpublish();
 
       this.sys = parser.parseSys(unpublished.sys, this.sys);
@@ -90,9 +90,9 @@ export class CFEntry<TFields> {
   }
 
   async archive(): Promise<CFEntry<TFields>> {
-    if (!this.isArchived()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (!this.isArchived()) {
       const archived = await this.entry.archive();
 
       this.sys = parser.parseSys(archived.sys, this.sys);
@@ -102,9 +102,9 @@ export class CFEntry<TFields> {
   }
 
   async unarchive(): Promise<CFEntry<TFields>> {
-    if (this.isArchived()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isArchived()) {
       const unarchived = await this.entry.unarchive();
 
       this.sys = parser.parseSys(unarchived.sys, this.sys);
@@ -121,25 +121,51 @@ export class CFEntry<TFields> {
   }
 
   isDraft(): boolean | undefined {
+    if (!this.entry) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isDraft" to get correct result.'
+      );
+    }
+
     return this.entry?.isDraft();
   }
 
   isUpdated(): boolean | undefined {
+    if (!this.entry) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isUpdated" to get correct result.'
+      );
+    }
+
     return this.entry?.isUpdated();
   }
 
   isPublished(): boolean | undefined {
+    if (!this.entry) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isPublished" to get correct result.'
+      );
+    }
+
     return this.entry?.isPublished();
   }
 
   isArchived(): boolean | undefined {
+    if (!this.entry) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isArchived" to get correct result.'
+      );
+    }
+
     return this.entry?.isArchived();
   }
 
-  private async loadManager(): Promise<void> {
+  async loadManager(): Promise<CFEntry<TFields>> {
     if (!this.entry) {
       this.entry = await this.cma.getEntry(this.sys.id);
     }
+
+    return this;
   }
 
   static createFromCDN<TFields>(

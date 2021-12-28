@@ -1,5 +1,5 @@
 {
-  "name": "@bgdnp/contentful-client",
+  "name": "@bgdn/contentful-client",
   "version": "0.0.1",
   "description": "Contentful client on steroids",
   "main": "dist/index.js",

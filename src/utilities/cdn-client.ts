@@ -6,8 +6,7 @@ import {
   Entry,
   EntryCollection,
 } from 'contentful';
-import { config } from './config';
-import { parser } from './parser';
+import { config, parser } from './';
 import { AssetFields, CFQuery } from '../types';
 
 export class CDNClient {

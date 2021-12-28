@@ -43,9 +43,9 @@ export class CFAsset {
   }
 
   async publish(): Promise<CFAsset> {
-    if (this.isDraft() || this.isUpdated()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isDraft() || this.isUpdated()) {
       const published = await this.asset.publish();
 
       this.sys = parser.parseSys(published.sys, this.sys);
@@ -55,9 +55,9 @@ export class CFAsset {
   }
 
   async unpublish(): Promise<CFAsset> {
-    if (this.isPublished()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isPublished()) {
       const unpublished = await this.asset.unpublish();
 
       this.sys = parser.parseSys(unpublished.sys, this.sys);
@@ -67,9 +67,9 @@ export class CFAsset {
   }
 
   async archive(): Promise<CFAsset> {
-    if (!this.isArchived()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (!this.isArchived()) {
       const archived = await this.asset.archive();
 
       this.sys = parser.parseSys(archived.sys, this.sys);
@@ -79,9 +79,9 @@ export class CFAsset {
   }
 
   async unarchive(): Promise<CFAsset> {
-    if (this.isArchived()) {
-      await this.loadManager();
+    await this.loadManager();
 
+    if (this.isArchived()) {
       const unarchived = await this.asset.unarchive();
 
       this.sys = parser.parseSys(unarchived.sys, this.sys);
@@ -98,25 +98,51 @@ export class CFAsset {
   }
 
   isDraft(): boolean | undefined {
+    if (!this.asset) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isDraft" to get correct result.'
+      );
+    }
+
     return this.asset?.isDraft();
   }
 
   isUpdated(): boolean | undefined {
+    if (!this.asset) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isUpdated" to get correct result.'
+      );
+    }
+
     return this.asset?.isUpdated();
   }
 
   isPublished(): boolean | undefined {
+    if (!this.asset) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isPublished" to get correct result.'
+      );
+    }
+
     return this.asset?.isPublished();
   }
 
   isArchived(): boolean | undefined {
+    if (!this.asset) {
+      console.warn(
+        'Manager is not loaded. Call "loadManager" method before "isArchived" to get correct result.'
+      );
+    }
+
     return this.asset?.isArchived();
   }
 
-  private async loadManager(): Promise<void> {
+  async loadManager(): Promise<CFAsset> {
     if (!this.asset) {
       this.asset = await this.cma.getAsset(this.sys.id);
     }
+
+    return this;
   }
 
   static createFromCDN(cma: CMAClient, asset: Asset): CFAsset {

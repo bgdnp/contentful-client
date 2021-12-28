@@ -4,7 +4,7 @@ import {
   Asset as CMAAsset,
   EntityMetaSysProps,
 } from 'contentful-management/dist/typings/export-types';
-import { config } from './config';
+import { config } from './';
 import { AssetFields, CFQuery, PlainEntry } from '../types';
 
 class Parser {

@@ -6,6 +6,7 @@ import {
 } from 'contentful-management/dist/typings/export-types';
 import { CFAsset } from './asset';
 import { AssetHashmap, CMAClient } from '../utilities';
+import { AssetFields, CFMapKey } from '../types';
 
 export class CFAssetCollection {
   public total: number;
@@ -26,11 +27,13 @@ export class CFAssetCollection {
 
   static createFromCDN(
     cma: CMAClient,
-    collection: AssetCollection
+    collection: AssetCollection,
+    key: CFMapKey<AssetFields> = 'sys.id'
   ): CFAssetCollection {
+    const [sysOrFields, field] = key.split('.');
     const items = new AssetHashmap(
       collection.items.map((item) => {
-        return [item.sys.id, CFAsset.createFromCDN(cma, item)];
+        return [item[sysOrFields][field], CFAsset.createFromCDN(cma, item)];
       })
     );
 
@@ -39,11 +42,13 @@ export class CFAssetCollection {
 
   static createFromCMA(
     cma: CMAClient,
-    collection: Collection<Asset, AssetProps>
+    collection: Collection<Asset, AssetProps>,
+    key: CFMapKey<AssetFields> = 'sys.id'
   ): CFAssetCollection {
+    const [sysOrFields, field] = key.split('.');
     const items = new AssetHashmap(
       collection.items.map((item) => {
-        return [item.sys.id, CFAsset.createFromCMA(cma, item)];
+        return [item[sysOrFields][field], CFAsset.createFromCMA(cma, item)];
       })
     );
 

@@ -25,7 +25,7 @@ export class ContentfulClient {
     this.cma = new CMAClient();
   }
 
-  async getEntry<TFields = {}>(
+  async getEntry<TFields = unknown>(
     id: string
   ): Promise<Readonly<CFEntry<TFields>>> {
     await this.cma.setup();
@@ -35,17 +35,17 @@ export class ContentfulClient {
     return CFEntry.createFromCDN<TFields>(this.cma, entry);
   }
 
-  async getEntries<TFields = {}>(
+  async getEntries<TFields = unknown>(
     query: CFQuery<TFields>
   ): Promise<Readonly<CFEntryCollection<TFields>>> {
     await this.cma.setup();
 
     const collection = await this.cdn.getEntries<TFields>(query);
 
-    return CFEntryCollection.createFromCDN(this.cma, collection);
+    return CFEntryCollection.createFromCDN(this.cma, collection, query.key);
   }
 
-  async manageEntry<TFields = {}>(
+  async manageEntry<TFields = unknown>(
     id: string
   ): Promise<Readonly<CFEntry<TFields>>> {
     await this.cma.setup();
@@ -55,17 +55,17 @@ export class ContentfulClient {
     return CFEntry.createFromCMA<TFields>(this.cma, cmaEntry);
   }
 
-  async manageEntries<TFields = {}>(
+  async manageEntries<TFields = unknown>(
     query: CFQuery<TFields>
   ): Promise<Readonly<CFEntryCollection<TFields>>> {
     await this.cma.setup();
 
     const cmaCollection = await this.cma.getEntries<TFields>(query);
 
-    return CFEntryCollection.createFromCMA(this.cma, cmaCollection);
+    return CFEntryCollection.createFromCMA(this.cma, cmaCollection, query.key);
   }
 
-  async createEntry<TFields = {}>(
+  async createEntry<TFields = unknown>(
     contentType: string,
     fields: TFields
   ): Promise<Readonly<CFEntry<TFields>>> {
@@ -97,7 +97,7 @@ export class ContentfulClient {
 
     const collection = await this.cdn.getAssets(query);
 
-    return CFAssetCollection.createFromCDN(this.cma, collection);
+    return CFAssetCollection.createFromCDN(this.cma, collection, query.key);
   }
 
   async manageAsset(id: string): Promise<Readonly<CFAsset>> {
@@ -115,7 +115,7 @@ export class ContentfulClient {
 
     const cmaCollection = await this.cma.getAssets(query);
 
-    return CFAssetCollection.createFromCMA(this.cma, cmaCollection);
+    return CFAssetCollection.createFromCMA(this.cma, cmaCollection, query.key);
   }
 
   async createAsset(fields: CreateAssetFields): Promise<Readonly<CFAsset>> {
@@ -126,7 +126,7 @@ export class ContentfulClient {
     return CFAsset.createFromCMA(this.cma, cmaAsset);
   }
 
-  entryRepository<TFields = {}>(
+  entryRepository<TFields = unknown>(
     query: CFQuery<TFields>
   ): Readonly<CFEntryRepository<TFields>> {
     return new CFEntryRepository<TFields>(this, query);
