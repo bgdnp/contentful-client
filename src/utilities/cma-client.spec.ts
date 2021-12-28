@@ -29,7 +29,7 @@ describe('CMAClient', () => {
   describe('getEntry method', () => {
     it('should return entry', async () => {
       await client.setup();
-      await client.setup();
+      await client.setup(); // called twice to cover case if management is already setup
       const entry = await client.getEntry('someid');
 
       expect(entry.sys.id).toEqual('someid');
@@ -62,7 +62,7 @@ describe('CMAClient', () => {
   describe('deleteEntry method', () => {
     it('should delete entry', async () => {
       await client.setup();
-      const entry = await client.deleteEntry('someid');
+      await client.deleteEntry('someid');
 
       expect(deleteEntryMock).toHaveBeenCalledWith('someid');
     });
